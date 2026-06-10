@@ -1,9 +1,12 @@
 package com.finpay.user_service.controller;
 
+import com.finpay.user_service.dto.CreateUserRequest;
+import com.finpay.user_service.dto.UserResponse;
 import com.finpay.user_service.model.User;
 import com.finpay.user_service.servicce.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,8 +20,8 @@ public class UesrController {
     }
 
     @PostMapping("/api/users")
-    public User createUser(){
-        return userService.createUser();
+    public UserResponse createUser(@RequestBody CreateUserRequest request){
+        return userService.createUser(request);
     }
 
     @GetMapping("/api/users")
