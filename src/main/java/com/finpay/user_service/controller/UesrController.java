@@ -4,6 +4,7 @@ import com.finpay.user_service.dto.CreateUserRequest;
 import com.finpay.user_service.dto.UserResponse;
 import com.finpay.user_service.model.User;
 import com.finpay.user_service.servicce.UserService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class UesrController {
     }
 
     @PostMapping("/api/users")
-    public UserResponse createUser(@RequestBody CreateUserRequest request){
+    public UserResponse createUser(@Valid @RequestBody CreateUserRequest request){
         return userService.createUser(request);
     }
 
