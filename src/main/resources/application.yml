@@ -9,3 +9,6 @@ spring:
       ddl-auto: update
 
     show-sql: true
+
+jwt:
+  secret: FINPAY-SECRET-KEY-FINPAY-SECRET-KEY-1234567890

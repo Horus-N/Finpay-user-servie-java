@@ -1,6 +1,8 @@
 package com.finpay.user_service.controller;
 
 import com.finpay.user_service.dto.CreateUserRequest;
+import com.finpay.user_service.dto.LoginRequest;
+import com.finpay.user_service.dto.LoginResponse;
 import com.finpay.user_service.dto.UserResponse;
 import com.finpay.user_service.model.User;
 import com.finpay.user_service.servicce.UserService;
@@ -20,7 +22,7 @@ public class UesrController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/users")
+    @PostMapping("/api/auth/users")
     public UserResponse createUser(@Valid @RequestBody CreateUserRequest request){
         return userService.createUser(request);
     }
@@ -28,5 +30,10 @@ public class UesrController {
     @GetMapping("/api/users")
     public List<User> findAll(){
         return userService.getAll();
+    }
+
+    @PostMapping("/api/auth/login")
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        return userService.login(request);
     }
 }
