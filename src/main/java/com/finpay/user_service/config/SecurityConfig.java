@@ -23,7 +23,7 @@ public class SecurityConfig {
                 .csrf(csrf-> csrf.disable()) //Vô hiệu hóa CSRF bảo vệ
                 .authorizeHttpRequests((auth->auth
                         // Cho phép TẤT CẢ các request đến đường dẫn register và health check mà không cần đăng nhập
-                        .requestMatchers("/api/v1/users/register", "/api/v1/health", "/api/v1/hello").permitAll()
+                        .requestMatchers("/api/v1/users/register","/api/v1/auth/**", "/api/v1/health", "/api/v1/hello").permitAll()
                         // Tất cả các request khác (ví dụ lấy chi tiết user) tạm thời bắt buộc phải đăng nhập
                         .anyRequest().authenticated()
                 ));

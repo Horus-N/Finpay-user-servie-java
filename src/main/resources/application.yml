@@ -1,3 +1,11 @@
+app:
+  wallet:
+    url: http://localhost:8081
+  #jwt
+  jwt:
+    secret: "FinPayPlatformSecretKey2026SuperSecureAndLongEnoughForHS256"
+    expiration-ms: 86400000 # Token có hiệu lực trong 24 giờ (tính bằng mili-giây)
+#postgresql
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/finpay
@@ -9,6 +17,3 @@ spring:
       ddl-auto: update
 
     show-sql: true
-
-jwt:
-  secret: FINPAY-SECRET-KEY-FINPAY-SECRET-KEY-1234567890
