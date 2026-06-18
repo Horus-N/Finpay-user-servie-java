@@ -7,10 +7,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
     // 1. Khai báo Bean mã háo mật khẩu để sử dụng ở khắp mọi nơi trong dự án
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -22,11 +29,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf-> csrf.disable()) //Vô hiệu hóa CSRF bảo vệ
                 .authorizeHttpRequests((auth->auth
-                        // Cho phép TẤT CẢ các request đến đường dẫn register và health check mà không cần đăng nhập
-                        .requestMatchers("/api/v1/users/register","/api/v1/auth/**", "/api/v1/health", "/api/v1/hello").permitAll()
-                        // Tất cả các request khác (ví dụ lấy chi tiết user) tạm thời bắt buộc phải đăng nhập
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 ));
+        // Kỹ thuật vàng: đặt máy quét thẻ JWT Filter chạy trước máy lọc UsernamePasswordAuthenticationFilter mặc định
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

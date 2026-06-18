@@ -1,7 +1,7 @@
 package com.finpay.user_service.config;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,7 +33,36 @@ public class JwtProvider {
                 .claim("role", "ROLE_USER")  // Phân quyền mặc định
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // Sử dụng chuẩn ký thuật toán mới của jjwt 0.11.x
+                .signWith(getSigningKey(), Jwts.SIG.HS256) // Sử dụng chuẩn ký thuật toán mới của jjwt 0.12.x
                 .compact();
+    }
+
+
+    // 1. Kiểm tra xác thực xem token có hợp lệ/hêt hạn không
+    public boolean validateToken(String token){
+        try{
+            Jwts.parser()
+                    .verifyWith(getSigningKey()) // quét chữ ký bằng secret key của hệ thống
+                    .build()
+                    .parseSignedClaims(token);
+
+            return true;
+        }catch (Exception e){
+
+            // Sẽ ném ra các lỗi nhưu ExpiredJwtException, MalformedJwtEception...
+            System.out.println("Token khong hơợp lệ: "+e.getMessage());
+        }
+
+        return false;
+    }
+
+    // 2. Hàm lấy thông tin Username từ trong Payload của Token
+    public String getUsernameFromToken(String token){
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("username",String.class); // Trích xuất claim tùy biến ta đã gài vào lúc tạo
     }
 }

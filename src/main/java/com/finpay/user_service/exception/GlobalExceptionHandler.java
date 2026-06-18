@@ -1,11 +1,15 @@
 package com.finpay.user_service.exception;
 
 import com.finpay.user_service.model.ApiResponse;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @ControllerAdvice // Đánh dấu đây là bộ interceptor bắt lỗi toàn cục cho các Controller
 public class GlobalExceptionHandler {
     // chú ý: ResponseEntity là một class Spring dùng để đại diện cho toàn bộ HTTP Response
@@ -21,11 +25,12 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response = new ApiResponse<>("ERROR_NOT_FOUND",ex.getMessage(),null);
         return new ResponseEntity<>(response,HttpStatus.NOT_FOUND);
     }
-
+    @ExceptionHandler(Exception.class)
     //3. Lưới bọc cuối cùng : Bắt all các lỗi hệ thống không lường trước được (NullPointer, DB sập...)
     public  ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex){
         //Trên môi trường thật, ta log lại lỗi này để dev vào sửa: ẽ.printStackTrace()
-        ApiResponse<Object> response = new ApiResponse<>("INTERNAL_SERVER_ERROR","System error, please try again!",null);
+        log.error("Unexpected error", ex);
+        ApiResponse<Object> response = new ApiResponse<>("INTERNAL_SERVER_ERROR", "An unexpected error occurred",null);
         return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

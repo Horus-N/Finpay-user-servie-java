@@ -1,6 +1,8 @@
+#server:
+#  port: 8089
 app:
   wallet:
-    url: http://localhost:8081
+    url: http://wallet-service:8081
   #jwt
   jwt:
     secret: "FinPayPlatformSecretKey2026SuperSecureAndLongEnoughForHS256"
@@ -8,7 +10,8 @@ app:
 #postgresql
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/finpay
+    url: jdbc:postgresql://finpay-postgres:5432/finpay_user_db
+#    url: jdbc:postgresql://localhost:5432/finpay_user_db
     username: admin
     password: admin
 
